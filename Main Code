@@ -1,0 +1,211 @@
+Server code:
+{
+"cells": [
+{
+"cell_type": "code",
+
+"execution_count": null, "metadata": { "scrolled": true
+},
+"outputs": [
+{
+"name":
+"stdout",
+"output_type": "stream",
+"text": [
+"Server is listening for connections...\n",
+"Connected	to ('127.0.0.1',
+ 
+64434)\n",
+"Image received and saved as
+C:\\Users\\ajayc\\D esktop\\Image streaming	Mini Project\\received_i mage_127.0.0.1.jpg
+\n"
+
+]
+}
+],
+
+
+"source": [ "import socket\n", "import os\n", "\n",
+"def save_image(image_ data, save_path):\n",
+"	with
+open(save_path, 'wb')	as
+image_file:\n", "
+image_file.write(im age_data)\n",
+"\n", "server_address =
+('127.0.0.1', 12345)\n",
+ 
+"save_directory = r'C:\\Users\\ajayc\\ Desktop\\Image streaming		Mini Project'	#	Your specified directory\n",
+"\n",
+"server_socket = socket.socket(socke t.AF_INET, socket.SOCK_STR EAM)\n",
+"server_socket.bind (server_address)\n"
+,
+
+"server_socket.liste n(1)\n", "\n",
+"print(\"Server is listening	for connections...\")\n",
+"\n",
+"while True:\n",
+" client_socket, client_address = server_socket.accep t()\n",
+ 
+print(f\"Connected
+to
+
+{client_address}\")\ n",
+"\n",
+" image_data = b''
+
+
+# Initialize an empty byte string to hold the image data\n",
+
+"	while
+True:\n",
+"	chunk = client_socket.recv( 1024)\n",
+"	if not
+chunk:\n",
+"	break\n",
+"	image_data
++= chunk\n", "\n",
+"	filename = f\"received_image_
+{client_address[0]}
+.jpg\" # Use client's IP address in the filename\n",
+"      save_path =
+ 
+os.path.join(save_d irectory, filename)\n",
+"
+save_image(image_ data, save_path)\n",
+"\n",
+" print(\"Image received and saved as\", save_path)\n",
+"\n",
+" client_socket.close(
+)\n",
+"\n",
+
+
+"server_socket.clos e()\n"
+
+]
+},
+{
+"cell_type": "code",
+
+
+
+"execution_count": null, "metadata": {},
+"outputs": [],
+"source": []
+ 
+}
+],
+"metadata": { "kernelspec": { "display_name": "Python	3
+(ipykernel)", "language":
+"python", "name": "python3"
+
+},
+"language_info": {
+
+
+"codemirror_mode"
+: {
+
+
+"name": "ipython",
+"version": 3
+
+
+},
+"file_extension": ".py",
+"mimetype": "text/x-python",
+"name": "python",
+ 
+"nbconvert_exporte r": "python",
+
+"pygments_lexer": "ipython3", "version": "3.9.13"
+}
+},
+
+
+"nbformat": 4, "nbformat_minor": 4
+}
+
+
+
+
+
+Client code:
+
+
+{
+"cells": [
+{
+"cell_type": "code", "execution_count": null, "metadata": {
+"scrolled": false
+},
+
+
+"outputs": [], "source": [
+"import tkinter as tk\n",
+"from tkinter import filedialog\n",
+ 
+"import socket\n", "\n",
+"def send_image():\n",
+" file_path = filedialog.askopenfilename(filetypes=[(\"Image files\", \"*.jpg *.jpeg
+*.png\")])\n", "	\n",
+" if not file_path:\n", " return\n",
+"	\n",
+" server_address = ('127.0.0.1', 12345)\n",
+" client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n", " \n",
+" try:\n",
+"	client_socket.connect(server_address)\n", "	with open(file_path, 'rb') as image_file:\n", "		image_data = image_file.read()\n",
+"	client_socket.sendall(image_data)\n",
+" status_label.config(text=\"Image sent successfully!\")\n",
+
+
+" except Exception as e:\n",
+"	status_label.config(text=\"Error sending image\")\n", "	print(e)\n",
+" finally:\n",
+"	client_socket.close()\n", "\n",
+"root = tk.Tk()\n",
+"root.title(\"Image Transfer Client\")\n", "\n",
+"label = tk.Label(root, text=\"Image Transfer Client\")\n", "label.pack(pady=10)\n",
+"\n",
+ 
+"select_button = tk.Button(root, text=\"Select Image\", command=send_image)\n", "select_button.pack()\n",
+"\n",
+"status_label = tk.Label(root, text=\"\")\n", "status_label.pack(pady=10)\n",
+"\n", "root.mainloop()\n"
+]
+},
+
+
+{
+"cell_type": "code", "execution_count": null, "metadata": {},
+"outputs": [],
+"source": []
+},
+
+
+{
+"cell_type": "code", "execution_count": null, "metadata": {},
+"outputs": [],
+"source": []
+}
+
+
+],
+"metadata": { "kernelspec": {
+"display_name": "Python 3 (ipykernel)", "language": "python",
+ 
+"name": "python3"
+},
+
+
+"language_info": { "codemirror_mode": { "name": "ipython", "version": 3
+},
+"file_extension": ".py", "mimetype": "text/x-python", "name": "python", "nbconvert_exporter": "python", "pygments_lexer": "ipython3", "version": "3.9.13"
+}
+},
+
+
+"nbformat": 4,
+"nbformat_minor": 4
+}
+ 
